@@ -8,8 +8,13 @@ spec:
       app: springboot
   replicas: 2 # tells deployment to run 2 pods matching the template
   strategy:
-    type: Recreate
-    
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 10
+  
   template:
     metadata:
       labels:
@@ -46,13 +51,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: mongo
+      name: mongo
   replicas: 1 # tells deployment to run 2 pods matching the template
   
   template:
     metadata:
       labels:
-        app: mongo
+        name: mongo
     spec:
       containers:
       - image: mongo
@@ -69,17 +74,17 @@ spec:
         hostPath:
          path: /tmp/dbbackup
 ---
-# Node Port Service
+# Mongo Node Port Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
   labels:
-    app: mongo
+    name: mongo
+  name: mongo
 spec:
-  selector:
-    app: mongo
   type: ClusterIP
   ports:
     - port: 27017
       targetPort: 27017
+  selector:
+    name: mongo
