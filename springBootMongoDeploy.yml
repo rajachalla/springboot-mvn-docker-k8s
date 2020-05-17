@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: springboot
-        image: rajachalla76/spring-boot-mongo:42
+        image: rajachalla76/spring-boot-mongo:43
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
